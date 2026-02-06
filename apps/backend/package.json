@@ -1,0 +1,47 @@
+{
+  "name": "@1code/backend",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc && tsx src/index.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@1code/shared": "*",
+    "@anthropic-ai/claude-agent-sdk": "0.2.32",
+    "@hono/node-server": "^1.13.7",
+    "@hono/trpc-server": "^0.3.3",
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "@trpc/server": "^11.7.1",
+    "async-mutex": "^0.5.0",
+    "better-sqlite3": "^12.6.2",
+    "chokidar": "^5.0.0",
+    "diff": "^8.0.3",
+    "drizzle-orm": "^0.45.1",
+    "gray-matter": "^4.0.3",
+    "hono": "^4.11.4",
+    "jsonc-parser": "^3.3.1",
+    "node-pty": "^1.1.0",
+    "pidtree": "^0.6.0",
+    "posthog-node": "^5.20.0",
+    "simple-git": "^3.28.0",
+    "superjson": "^2.2.2",
+    "unique-names-generator": "^4.7.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/diff": "^8.0.0",
+    "@types/node": "^20.17.50",
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.19.2",
+    "typescript": "^5.4.5"
+  },
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
