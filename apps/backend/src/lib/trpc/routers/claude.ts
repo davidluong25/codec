@@ -1644,7 +1644,7 @@ ${prompt}
                     } else if (toolName == "ExitPlanMode") {
                       return {
                         behavior: "deny",
-                        message: `IMPORTANT: DONT IMPLEMENT THE PLAN UNTIL THE EXPLIT COMMAND. THE PLAN WAS **ONLY** PRESENTED TO USER, FINISH CURRENT MESSAGE AS SOON AS POSSIBLE`,
+                        message: `IMPORTANT: DONT IMPLEMENT THE PLAN UNTIL THE EXPLICIT COMMAND. THE PLAN WAS **ONLY** PRESENTED TO USER, FINISH CURRENT MESSAGE AS SOON AS POSSIBLE`,
                       }
                     } else if (PLAN_MODE_BLOCKED_TOOLS.has(toolName)) {
                       return {
