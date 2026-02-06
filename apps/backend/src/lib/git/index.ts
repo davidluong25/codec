@@ -21,7 +21,7 @@ export * from "./worktree-naming";
 export * from "./github";
 
 // Re-export types
-export type { GitChangesStatus, ChangedFile, CommitInfo, FileContents } from "../../../shared/changes-types";
+export type { GitChangesStatus, ChangedFile, CommitInfo, FileContents } from "@1code/shared";
 
 /**
  * Combined git router with flattened procedures

@@ -1,5 +1,5 @@
-import type { FileContents } from "../../../shared/changes-types";
-import { detectLanguage } from "../../../shared/detect-language";
+import type { FileContents } from "@1code/shared";
+import { detectLanguage } from "@1code/shared";
 import simpleGit from "simple-git";
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";

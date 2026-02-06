@@ -1,7 +1,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
-import { BrowserWindow, shell } from 'electron';
+// Stubs for Electron APIs (web backend)
 import {
   getMcpServerConfig,
   GLOBAL_MCP_PATH,
@@ -12,7 +12,8 @@ import {
 import { getClaudeShellEnvironment } from './claude/env';
 import { CraftOAuth, fetchOAuthMetadata, getMcpBaseUrl, type OAuthMetadata, type OAuthTokens } from './oauth';
 import { discoverPluginMcpServers } from './plugins';
-import { bringToFront } from './window';
+// bringToFront is an Electron feature - stub for web
+function bringToFront() {}
 
 
 /**
@@ -236,8 +237,9 @@ export async function startMcpOAuth(
       timeoutId,
     });
 
-    // Open browser
-    shell.openExternal(authUrl);
+    // Open browser - in web mode, log the URL (frontend handles opening)
+    console.log(`[MCP OAuth] Auth URL: ${authUrl}`);
+    // shell.openExternal(authUrl);
   });
 }
 
@@ -280,14 +282,9 @@ export async function handleMcpOAuthCallback(code: string, state: string): Promi
     // 3. Save to ~/.claude.json
     await saveTokensToClaudeJson(pending.serverName, pending.projectPath, tokens, pending.clientId);
 
-    // 4. Notify renderer (tools will be fetched on demand via tRPC)
-    BrowserWindow.getAllWindows().forEach((win) => {
-      win.webContents.send('mcp-auth-completed', {
-        serverName: pending.serverName,
-        projectPath: pending.projectPath,
-        success: true,
-      });
-    });
+    // 4. Notify renderer - in web mode, handled via polling/WebSocket
+    // TODO: implement WebSocket notification
+    console.log('[MCP OAuth] Auth completed for:', pending.serverName);
 
     // 5. Focus the main window after OAuth callback
     bringToFront();

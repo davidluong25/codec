@@ -3,7 +3,7 @@ import type {
 	CommitInfo,
 	FileStatus,
 	GitChangesStatus,
-} from "../../../../shared/changes-types";
+} from "@1code/shared";
 import type { StatusResult } from "simple-git";
 
 function mapGitStatus(gitIndex: string, gitWorking: string): FileStatus {

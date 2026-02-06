@@ -1,4 +1,4 @@
-import type { ChangedFile } from "../../../../shared/changes-types";
+import type { ChangedFile } from "@1code/shared";
 import type { SimpleGit } from "simple-git";
 import { parseDiffNumstat } from "./parse-status";
 

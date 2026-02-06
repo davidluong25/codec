@@ -1,4 +1,4 @@
-import type { ChangedFile, GitChangesStatus } from "../../../shared/changes-types";
+import type { ChangedFile, GitChangesStatus } from "@1code/shared";
 import simpleGit from "simple-git";
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";

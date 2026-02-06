@@ -11,7 +11,12 @@ import os from "node:os"
 import { z } from "zod"
 import { publicProcedure, router } from "../index"
 import { getApiUrl } from "../../config"
-import { getAuthManager } from "../../../auth-manager"
+// Stub auth manager for web backend
+function getAuthManager() {
+  return {
+    getToken: async (): Promise<string | null> => null,
+  }
+}
 
 // Max audio size: 25MB (Whisper API limit)
 const MAX_AUDIO_SIZE = 25 * 1024 * 1024
