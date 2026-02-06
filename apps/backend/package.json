@@ -21,7 +21,7 @@
     "diff": "^8.0.3",
     "drizzle-orm": "^0.45.1",
     "gray-matter": "^4.0.3",
-    "hono": "^4.6.16",
+    "hono": "^4.11.4",
     "jsonc-parser": "^3.3.1",
     "node-pty": "^1.1.0",
     "pidtree": "^0.6.0",
