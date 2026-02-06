@@ -1,15 +1,9 @@
-import { app } from "electron"
 import { join } from "path"
 import { appendFile, mkdir, stat, readdir, unlink } from "fs/promises"
 
-// Check if logging is enabled (lazy check after app is ready)
+// Check if logging is enabled
 function isEnabled(): boolean {
-  try {
-    return process.env.CLAUDE_RAW_LOG === "1" || !app.isPackaged
-  } catch {
-    // App not ready yet, check env var only
-    return process.env.CLAUDE_RAW_LOG === "1"
-  }
+  return process.env.CLAUDE_RAW_LOG === "1" || process.env.NODE_ENV === "development"
 }
 const MAX_LOG_SIZE = 10 * 1024 * 1024 // 10MB per file
 const LOG_RETENTION_DAYS = 7 // Keep logs for 7 days
@@ -20,7 +14,8 @@ let currentSessionId: string | null = null
 
 async function ensureLogsDir(): Promise<string> {
   if (!logsDir) {
-    logsDir = join(app.getPath("userData"), "logs", "claude")
+    const dataDir = process.env.DATA_DIR || join(process.cwd(), "data")
+    logsDir = join(dataDir, "logs", "claude")
     await mkdir(logsDir, { recursive: true })
   }
   return logsDir
@@ -126,5 +121,6 @@ export async function logRawClaudeMessage(
  * Useful for UI to show "Open Logs" button
  */
 export function getLogsDirectory(): string {
-  return join(app.getPath("userData"), "logs", "claude")
+  const dataDir = process.env.DATA_DIR || join(process.cwd(), "data")
+  return join(dataDir, "logs", "claude")
 }

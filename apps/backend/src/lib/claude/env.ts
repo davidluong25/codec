@@ -1,4 +1,3 @@
-import { app } from "electron"
 import { execSync } from "node:child_process"
 import fs from "node:fs"
 import os from "node:os"
@@ -16,10 +15,9 @@ let cachedShellEnv: Record<string, string> | null = null
 // Delimiter for parsing env output
 const DELIMITER = "_CLAUDE_ENV_DELIMITER_"
 
+const IS_DEV = process.env.NODE_ENV === "development"
+
 // Keys to strip (prevent interference from unrelated providers)
-// NOTE: We intentionally keep ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL in production
-// so users can use their existing Claude Code CLI configuration (API proxy, etc.)
-// Based on PR #29 by @sa4hnd
 const STRIPPED_ENV_KEYS_BASE = [
   "OPENAI_API_KEY",
   "CLAUDE_CODE_USE_BEDROCK",
@@ -27,9 +25,7 @@ const STRIPPED_ENV_KEYS_BASE = [
 ]
 
 // In dev mode, also strip ANTHROPIC_API_KEY so OAuth token is used instead
-// This allows devs to test OAuth flow without unsetting their shell env
-// Added by Sergey Bunas for dev purposes
-const STRIPPED_ENV_KEYS = !app.isPackaged
+const STRIPPED_ENV_KEYS = IS_DEV
   ? [...STRIPPED_ENV_KEYS_BASE, "ANTHROPIC_API_KEY"]
   : STRIPPED_ENV_KEYS_BASE
 
@@ -39,35 +35,23 @@ let binaryPathComputed = false
 
 /**
  * Get path to the bundled Claude binary.
- * Returns the path to the native Claude executable bundled with the app.
- * CACHED - only computes path once and logs verbose info on first call.
+ * In web backend, looks for claude in PATH or a configured location.
  */
 export function getBundledClaudeBinaryPath(): string {
-  // Return cached path if already computed
   if (binaryPathComputed) {
     return cachedBinaryPath!
   }
 
-  const isDev = !app.isPackaged
   const currentPlatform = process.platform
   const arch = process.arch
 
-  // Always log on first call to help debug
   console.log("[claude-binary] ========== BUNDLED BINARY DEBUG ==========")
-  console.log("[claude-binary] isDev:", isDev)
+  console.log("[claude-binary] isDev:", IS_DEV)
   console.log("[claude-binary] platform:", currentPlatform)
   console.log("[claude-binary] arch:", arch)
-  console.log("[claude-binary] appPath:", app.getAppPath())
 
-  // In dev: apps/desktop/resources/bin/{platform}-{arch}/claude
-  // In production: {resourcesPath}/bin/claude
-  const resourcesPath = isDev
-    ? path.join(
-        app.getAppPath(),
-        "resources/bin",
-        `${currentPlatform}-${arch}`
-      )
-    : path.join(process.resourcesPath, "bin")
+  // In web backend: look for binary relative to cwd or in a configured path
+  const resourcesPath = process.env.CLAUDE_BIN_DIR || path.join(process.cwd(), "resources", "bin", `${currentPlatform}-${arch}`)
 
   console.log("[claude-binary] resourcesPath:", resourcesPath)
 
@@ -76,17 +60,10 @@ export function getBundledClaudeBinaryPath(): string {
 
   console.log("[claude-binary] binaryPath:", binaryPath)
 
-  // Check if binary exists
   const exists = fs.existsSync(binaryPath)
 
   if (!exists) {
-    console.error(
-      "[claude-binary] WARNING: Binary not found at path:",
-      binaryPath
-    )
-    console.error(
-      "[claude-binary] Run 'bun run claude:download' to download it"
-    )
+    console.error("[claude-binary] WARNING: Binary not found at path:", binaryPath)
   } else {
     const stats = fs.statSync(binaryPath)
     const sizeMB = (stats.size / 1024 / 1024).toFixed(1)
@@ -97,7 +74,6 @@ export function getBundledClaudeBinaryPath(): string {
   }
   console.log("[claude-binary] ============================================")
 
-  // Cache the result
   cachedBinaryPath = binaryPath
   binaryPathComputed = true
 

@@ -1,6 +1,5 @@
 import fs from "node:fs/promises"
 import path from "node:path"
-import { app } from "electron"
 
 const MAX_SCROLLBACK_CHARS = 500_000
 
@@ -8,7 +7,8 @@ const MAX_SCROLLBACK_CHARS = 500_000
  * Get the directory for terminal history files.
  */
 function getHistoryDir(): string {
-  return path.join(app.getPath("userData"), "terminal-history")
+  const dataDir = process.env.DATA_DIR || path.join(process.cwd(), "data")
+  return path.join(dataDir, "terminal-history")
 }
 
 /**
