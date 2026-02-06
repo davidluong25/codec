@@ -9,7 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@1code/shared": "workspace:*",
+    "@1code/shared": "*",
     "@anthropic-ai/claude-agent-sdk": "0.2.32",
     "@hono/node-server": "^1.13.7",
     "@hono/trpc-server": "^0.3.3",
@@ -23,6 +23,7 @@
     "gray-matter": "^4.0.3",
     "hono": "^4.6.16",
     "jsonc-parser": "^3.3.1",
+    "node-pty": "^1.1.0",
     "pidtree": "^0.6.0",
     "posthog-node": "^5.20.0",
     "simple-git": "^3.28.0",

@@ -34,3 +34,9 @@ resources/bin/
 
 # Database
 apps/backend/data/
+
+# Lockfile (use bun.lock or package-lock.json)
+package-lock.json
+
+# Frontend build output
+apps/frontend/dist/

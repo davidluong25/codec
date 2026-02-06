@@ -1,9 +1,13 @@
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
 import { migrate } from "drizzle-orm/better-sqlite3/migrator"
-import { join } from "path"
+import { join, dirname } from "path"
 import { existsSync, mkdirSync } from "fs"
+import { fileURLToPath } from "url"
 import * as schema from "./schema"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 let db: ReturnType<typeof drizzle<typeof schema>> | null = null
 let sqlite: Database.Database | null = null
@@ -30,7 +34,8 @@ function getMigrationsPath(): string {
   if (process.env.MIGRATIONS_DIR) {
     return process.env.MIGRATIONS_DIR
   }
-  return join(__dirname, "../../drizzle")
+  // The drizzle folder is at the root of the backend package
+  return join(__dirname, "../../../drizzle")
 }
 
 /**
